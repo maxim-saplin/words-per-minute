@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        #sourceText {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 90%;
+            max-width: 600px;
+        }
+        #textInput {
+            width: 90%;
+            max-width: 600px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+        #result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sourceText">Type the text shown here as fast and accurately as you can.</div>
+    <textarea id="textInput" placeholder="Start typing..."></textarea>
+    <div id="result"></div>
+
+    <script>
+        const sourceTextElement = document.getElementById('sourceText');
+        const textInputElement = document.getElementById('textInput');
+        const resultElement = document.getElementById('result');
+
+        // Example text
+        const sourceText = "This is a simple typing test. Type this text as quickly and accurately as you can.";
+        sourceTextElement.innerText = sourceText;
+
+        let startTime;
+        let wordCount = sourceText.split(' ').length;
+
+        textInputElement.addEventListener('input', () => {
+            if (!startTime) {
+                startTime = new Date();
+            }
+
+            const typedText = textInputElement.value;
+            const typedWordCount = typedText.split(' ').filter(Boolean).length;
+
+            if (typedWordCount >= wordCount) {
+                const endTime = new Date();
+                const elapsedTime = (endTime - startTime) / 1000; // seconds
+                const wpm = Math.round((typedWordCount / elapsedTime) * 60);
+
+                // Calculate accuracy
+                let matchCount = 0;
+                const typedWords = typedText.split(' ');
+                const sourceWords = sourceText.split(' ');
+
+                typedWords.forEach((word, index) => {
+                    if (word === sourceWords[index]) {
+                        matchCount++;
+                    }
+                });
+
+                const accuracy = Math.round((matchCount / wordCount) * 100);
+
+                resultElement.innerHTML = `WPM: ${wpm}, Accuracy: ${accuracy}%`;
+            }
+        });
+    </script>
+</body>
+</html>
